@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.0.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      var id = jsPsych.data.get().filter({type: 'prompt'}).values()[0].response.Q0; // get prompt response
+      jsPsych.data.addProperties({ID: id}); // add it to the data
+      //jsPsych.data.displayData(); // show data on screen afterward
+      //jsPsych.data.get().localSave('csv', 'test.csv');
+      jsPsych.data.get().localSave('csv', 'subject_' + id +'.csv'); // save data to csv locally
+    }
+  });
+
+  var timeline = [];
+
+  var color_images = ['img/fixation.jpeg', 'img/colorTL.jpeg', 'img/colorTLfrog.jpeg', 'img/colorTR.jpeg', 'img/colorTRfrog.jpeg', 'img/colorBR.jpeg', 'img/colorBRfrog.jpeg', 'img/colorBL.jpeg', 'img/colorBLfrog.jpeg'];
+
+  var shape_images = ['img/shapeTL.jpeg', 'img/shapeTLfrog.jpeg', 'img/shapeTR.jpeg', 'img/shapeTRfrog.jpeg', 'img/shapeBR.jpeg', 'img/shapeBRfrog.jpeg', 'img/shapeBL.jpeg', 'img/shapeBLfrog.jpeg'];
+
+  var test_images = ['img/latTL.jpeg', 'img/latTLfrog.jpeg', 'img/latTR.jpeg','img/latTRfrog.jpeg', 'img/latBR.jpeg', 'img/latBRfrog.jpeg', 'img/latBL.jpeg', 'img/latBLfrog.jpeg', 'img/sagTL.jpeg', 'img/sagTLfrog.jpeg','img/sagTR.jpeg', 'img/sagTRfrog.jpeg', 'img/sagBR.jpeg', 'img/sagBRfrog.jpeg', 'img/sagBL.jpeg', 'img/sagBLfrog.jpeg'];
+
+
+  var preload = {
+      type: jsPsychPreload,
+      //auto_preload: true 
+      images: [color_images, shape_images, test_images]
+  };
+  timeline.push(preload);
+
+  var prompt = {
+    type: jsPsychSurveyText,
+    questions: [{prompt: 'Enter participant ID'}],
+    data: {
+      type: 'prompt',
+      stimulus: 'NA'
+    }
+  };
+  timeline.push(prompt);
+
+
+  var welcome = {
+    type: jsPsychImageButtonResponse,
+    stimulus: '',
+    choices: ['img/jumpy.jpeg'],
+    button_html:'<img src=%choice%></img>',
+    data: {
+      type: 'welcome',
+      stimulus: 'NA'
+    } 
+  };
+
+  timeline.push(welcome);
+
+  // practice stimuli
+  var color_stimuli = [
+    { pads: 'img/colorTL.jpeg', frog: 'img/colorTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/colorTR.jpeg', frog: 'img/colorTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/colorBR.jpeg', frog: 'img/colorBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
+  ];
+
+  var shape_stimuli = [
+    { pads: 'img/shapeTL.jpeg', frog: 'img/shapeTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/shapeTR.jpeg', frog: 'img/shapeTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/shapeBR.jpeg', frog: 'img/shapeBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
+  ];
+  
+  // test stimuli
+  var test_stimuli = [
+    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL'},
+    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
+  ];
+
+  // define basic types of things to present
+
+  var fixation = { // show fixation
+    type: jsPsychImageButtonResponse,
+    stimulus: 'fixation',
+    choices: ['img/fixation.jpeg'],
+    button_html:'<img src=%choice%></img>',
+    stimulus_width: 200,
+    maintain_aspect_ratio: true,
+    render_on_canvas: true,
+    data: {type: 'ITI'}
+  };
+  
+  var stimulus = { // Show the stimulus for kids to judge
+    type: jsPsychImageButtonResponse,
+    stimulus: jsPsych.timelineVariable('target'),
+    choices: [jsPsych.timelineVariable('pads')],
+    button_html:'<img src=%choice%></img>',
+    //trial_duration: 2000, // limit reactions to 2s.
+    stimulus_width: 200,
+    maintain_aspect_ratio: true,
+    render_on_canvas: true,
+    data: {type: 'search'}
+  };
+
+  var feedback = { // Show the frog's location as feedback
+    type: jsPsychImageButtonResponse,
+    stimulus: jsPsych.timelineVariable('target'),
+    choices: [jsPsych.timelineVariable('frog')],
+    button_html:'<img src=%choice%></img>',
+    stimulus_width: 200,
+    maintain_aspect_ratio: true,
+    render_on_canvas: true,
+    data: {type: 'feedback'}
+  };
+
+  
+  // present practice trials 
+  var color_trials = {
+    timeline: [fixation, stimulus, feedback], // removed fixation...
+    timeline_variables: color_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+  timeline.push(color_trials);
+
+  var shape_trials = {
+    timeline: [fixation, stimulus, feedback], // removed fixation...
+    timeline_variables: shape_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+  timeline.push(shape_trials);
+
+  // present test trials 
+  var test_trials = {
+    timeline: [fixation, stimulus, feedback], // removed fixation...
+    timeline_variables: test_stimuli,
+    randomize_order: true,
+    repetitions: 2
+  };
+
+  timeline.push(test_trials);
+
+
+  jsPsych.run(timeline);
+
+
+  </script>
+</html>
