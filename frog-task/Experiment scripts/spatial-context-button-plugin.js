@@ -2,7 +2,7 @@ var SpatialContextButtonResponse = (function (jspsych) {
     "use strict";
   
     const info = {
-      name: "SPATIAL-CONTEXT-PLUGIN",
+      name: "SPATIAL-CONTEXT-BUTTON-PLUGIN",
         // stimuli image, choices to label buttons
       parameters: {
          /** The image to be displayed */
@@ -72,13 +72,14 @@ var SpatialContextButtonResponse = (function (jspsych) {
          // update the page content
         display_element.innerHTML = html;
 
+
         var img = display_element.querySelector(
           "#spatial-context-stimulus"
         )
 
         //Set stimulus style
         var width = trial.stimulus_width;
-        var height = img.naturalHeight * (trial.stimulus_width / img.naturalWidth);
+        var height = trial.stimulus_height;
         img.style.height = height.toString() + "px";
         img.style.width = width.toString() + "px";
 
@@ -111,10 +112,11 @@ var SpatialContextButtonResponse = (function (jspsych) {
         );
 
         buttons.forEach(function(btn) {
-          btn.style.height = (height/2).toString() + "px";
           btn.style.width = (width/2).toString() + "px";
           btn.style.backgroundColor = "transparent";
           btn.style.border = 'none';
+          btn.style.fontSize = 0;
+          btn.style.height = (height/2).toString() + "px";
         });
 
         // start timing
@@ -124,9 +126,7 @@ var SpatialContextButtonResponse = (function (jspsych) {
         buttons.forEach(function(btn) {
           btn.addEventListener("click", (e) => {
             var choice = e.target.innerHTML;
-            console.log(choice)
             after_response(choice)
-
           })
         })
 
@@ -143,11 +143,6 @@ var SpatialContextButtonResponse = (function (jspsych) {
           var rt = Math.round(end_time - start_time);
           response.button = choice;
           response.rt = rt;
-
-          // after a valid response, the stimulus will have the CSS class 'responded'
-          // which can be used to provide visual feedback that a response was recorded
-          display_element.querySelector("#spatial-context-stimulus").className +=
-            " responded";
 
           // disable all the buttons after a response
           buttons.forEach(function(btn) {

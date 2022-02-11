@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.0.0"></script>
-    <script src="spatial-context-plugin.js"></script>
+    <script src="spatial-context-button-plugin.js"></script>
     <script src="spatial-context-image-plugin.js"></script>
     <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
@@ -30,11 +30,11 @@
 
   var color_images = ['img/jumpy.jpeg', 'img/blank.jpeg', 'img/colorTL.jpeg', 'img/colorTLfrog.jpeg', 'img/colorTR.jpeg', 'img/colorTRfrog.jpeg', 'img/colorBR.jpeg', 'img/colorBRfrog.jpeg', 'img/colorBL.jpeg', 'img/colorBLfrog.jpeg'];
   var shape_images = ['img/shapeTL.jpeg', 'img/shapeTLfrog.jpeg', 'img/shapeTR.jpeg', 'img/shapeTRfrog.jpeg', 'img/shapeBR.jpeg', 'img/shapeBRfrog.jpeg', 'img/shapeBL.jpeg', 'img/shapeBLfrog.jpeg'];
+  var test_images = ['img/latTL.jpeg', 'img/latTLfrog.jpeg', 'img/latTR.jpeg','img/latTRfrog.jpeg', 'img/latBR.jpeg', 'img/latBRfrog.jpeg', 'img/latBL.jpeg', 'img/latBLfrog.jpeg', 'img/sagTL.jpeg', 'img/sagTLfrog.jpeg','img/sagTR.jpeg', 'img/sagTRfrog.jpeg', 'img/sagBR.jpeg', 'img/sagBRfrog.jpeg', 'img/sagBL.jpeg', 'img/sagBLfrog.jpeg'];
 
   var preload = {
       type: jsPsychPreload,
-      // auto_preload: true, 
-      images: [color_images]
+      images: color_images.concat(shape_images, test_images),
   };
   timeline.push(preload);
 
@@ -70,30 +70,62 @@
     { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
   ];
 
+  var shape_stimuli = [
+    { pads: 'img/shapeTL.jpeg', frog: 'img/shapeTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/shapeTR.jpeg', frog: 'img/shapeTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/shapeBR.jpeg', frog: 'img/shapeBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
+  ];
+  
+  // test stimuli
+  var test_stimuli = [
+    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL'},
+    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
+  ];
+
 
   var iti = { // show blank
     type: SpatialContextImage,
     stimulus: 'img/blank.jpeg',
     stimulus_width: 1024,
+    stimulus_height: 768,
     trial_duration: 1000,
     response_ends_trial: false,
     data: {type: 'ITI'}
   }
 
 
-  var stimulus = {
+  var stimulus = { // Show the stimulus for kids to judge
     type: SpatialContextButtonResponse,
     stimulus: jsPsych.timelineVariable('pads'),
     stimulus_width: 1024,
+    stimulus_height: 768,
     choices:['TL','TR','BL','BR'],
-    data: {type: 'search'}
+    data: {
+      type: 'search',
+      target_response: jsPsych.timelineVariable('target') 
+    },
+    on_finish: function(data){
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
+    }
+
   }
 
   var feedback = { // Show the frog's location as feedback
     type: SpatialContextImage,
     stimulus: jsPsych.timelineVariable('frog'),
     stimulus_width: 1024,
-    data: {type: 'feedback'}
+    stimulus_height: 768,
+    data: {
+      type: 'feedback',
+    }
+
   };
 
   
@@ -107,7 +139,25 @@
 
   timeline.push(color_trials);
 
+  // present shape trials 
+  var shape_trials = {
+    timeline: [iti, stimulus, feedback], // removed fixation...
+    timeline_variables: shape_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
 
+  timeline.push(shape_trials);
+
+ // present test trials 
+ var test_trials = {
+    timeline: [iti, stimulus, feedback], // removed fixation...
+    timeline_variables: test_stimuli,
+    randomize_order: true,
+    repetitions: 2
+  };
+
+  timeline.push(test_trials);
 
   //ending sequence
   timeline.push(iti);

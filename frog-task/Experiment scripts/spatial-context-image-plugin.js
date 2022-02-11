@@ -76,7 +76,7 @@ var SpatialContextImage= (function (jspsych) {
 
         //Set stimulus style
         var width = trial.stimulus_width;
-        var height = img.naturalHeight * (trial.stimulus_width / img.naturalWidth);
+        var height = trial.stimulus_height;
         img.style.height = height.toString() + "px";
         img.style.width = width.toString() + "px";
 
