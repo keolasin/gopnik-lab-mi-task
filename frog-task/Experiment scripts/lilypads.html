@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.0.0"></script>
+    <script src="spatial-context-plugin.js"></script>
+    <script src="spatial-context-image-plugin.js"></script>
+    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      var id = jsPsych.data.get().filter({type: 'prompt'}).values()[0].response.Q0; // get prompt response
+      jsPsych.data.addProperties({ID: id}); // add it to the data
+      jsPsych.data.displayData(); // show data on screen afterward
+      jsPsych.data.get().localSave('csv', 'subject_' + id +'.csv');
+    }
+  });
+
+  var timeline = [];
+
+  var color_images = ['img/jumpy.jpeg', 'img/blank.jpeg', 'img/colorTL.jpeg', 'img/colorTLfrog.jpeg', 'img/colorTR.jpeg', 'img/colorTRfrog.jpeg', 'img/colorBR.jpeg', 'img/colorBRfrog.jpeg', 'img/colorBL.jpeg', 'img/colorBLfrog.jpeg'];
+  var shape_images = ['img/shapeTL.jpeg', 'img/shapeTLfrog.jpeg', 'img/shapeTR.jpeg', 'img/shapeTRfrog.jpeg', 'img/shapeBR.jpeg', 'img/shapeBRfrog.jpeg', 'img/shapeBL.jpeg', 'img/shapeBLfrog.jpeg'];
+
+  var preload = {
+      type: jsPsychPreload,
+      // auto_preload: true, 
+      images: [color_images]
+  };
+  timeline.push(preload);
+
+  var prompt = {
+    type: jsPsychSurveyText,
+    questions: [{prompt: 'Enter participant ID'}],
+    data: {
+      type: 'prompt',
+      stimulus: 'NA'
+    }
+  };
+  timeline.push(prompt);
+
+
+  var welcome = {
+    type: jsPsychImageButtonResponse,
+    stimulus: '',
+    choices: ['img/jumpy.jpeg'],
+    button_html:'<img src=%choice%></img>',
+    data: {
+      type: 'welcome',
+      stimulus: 'NA'
+    } 
+  };
+
+  timeline.push(welcome);
+
+  // practice stimuli
+  var color_stimuli = [
+    { pads: 'img/colorTL.jpeg', frog: 'img/colorTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/colorTR.jpeg', frog: 'img/colorTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/colorBR.jpeg', frog: 'img/colorBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
+  ];
+
+
+  var iti = { // show blank
+    type: SpatialContextImage,
+    stimulus: 'img/blank.jpeg',
+    stimulus_width: 1024,
+    trial_duration: 1000,
+    response_ends_trial: false,
+    data: {type: 'ITI'}
+  }
+
+
+  var stimulus = {
+    type: SpatialContextButtonResponse,
+    stimulus: jsPsych.timelineVariable('pads'),
+    stimulus_width: 1024,
+    choices:['TL','TR','BL','BR'],
+    data: {type: 'search'}
+  }
+
+  var feedback = { // Show the frog's location as feedback
+    type: SpatialContextImage,
+    stimulus: jsPsych.timelineVariable('frog'),
+    stimulus_width: 1024,
+    data: {type: 'feedback'}
+  };
+
+  
+  // present practice trials 
+  var color_trials = {
+    timeline: [iti, stimulus, feedback], // removed fixation...
+    timeline_variables: color_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+  timeline.push(color_trials);
+
+
+
+  //ending sequence
+  timeline.push(iti);
+  timeline.push(welcome);
+
+
+  jsPsych.run(timeline);
+
+
+  </script>
+</html>
+
+

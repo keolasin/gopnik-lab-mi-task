@@ -1,102 +1,145 @@
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://unpkg.com/jspsych@7.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script> 
+    <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.0.0"></script>
+    <script src="spatial-context-plugin.js" type="module"></script>
     <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
-  
   <script>
 
-    /* initialize jsPsych */
-    var jsPsych = initJsPsych({
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
 
-    /* create timeline */
-    var timeline = [];
-	
-	/* preload media for faster presentation */
-    var preload = {
-	  type: jsPsychPreload,
-	  images: ['img/blue.png', 'img/orange.png']
-	};
-	timeline.push(preload);
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      var id = jsPsych.data.get().filter({type: 'prompt'}).values()[0].response.Q0; // get prompt response
+      jsPsych.data.addProperties({ID: id}); // add it to the data
+      jsPsych.data.displayData(); // show data on screen afterward
+      jsPsych.data.get().localSave('csv', 'subject_' + id +'.csv');
+    }
+  });
 
-	/* welcome message */
-    var welcome = {
-  		type: jsPsychHtmlKeyboardResponse,
-  		stimulus: "Welcome to the experiment. Press any key to begin."
-	};
-	/* add to the end of the timeline */
-	timeline.push(welcome);
+  var timeline = [];
 
-	var instructions = {
-	  type: jsPsychHtmlKeyboardResponse,
-	  stimulus: `
-	    <p>In this experiment, a circle will appear in the center 
-	    of the screen.</p><p>If the circle is <strong>blue</strong>, 
-	    press the letter F on the keyboard as fast as you can.</p>
-	    <p>If the circle is <strong>orange</strong>, press the letter J 
-	    as fast as you can.</p>
-	    <div style='width: 700px;'>
-	    <div style='float: left;'><img src='img/blue.png'></img>
-	    <p class='small'><strong>Press the F key</strong></p></div>
-	    <div style='float: right;'><img src='img/orange.png'></img>
-	    <p class='small'><strong>Press the J key</strong></p></div>
-	    </div>
-	    <p>Press any key to begin.</p>
-	  `,
-	  post_trial_gap: 2000
-	};
-	timeline.push(instructions);
+  var color_images = ['img/jumpy.jpeg', 'img/blank.jpeg', 'img/colorTL.jpeg', 'img/colorTLfrog.jpeg', 'img/colorTR.jpeg', 'img/colorTRfrog.jpeg', 'img/colorBR.jpeg', 'img/colorBRfrog.jpeg', 'img/colorBL.jpeg', 'img/colorBLfrog.jpeg'];
+  var shape_images = ['img/shapeTL.jpeg', 'img/shapeTLfrog.jpeg', 'img/shapeTR.jpeg', 'img/shapeTRfrog.jpeg', 'img/shapeBR.jpeg', 'img/shapeBRfrog.jpeg', 'img/shapeBL.jpeg', 'img/shapeBLfrog.jpeg'];
 
-	/* define trial stimuli array (and correct response) for timeline variables */
-    var test_stimuli = [
-	  { stimulus: "img/blue.png",  correct_response: 'f'},
-	  { stimulus: "img/orange.png",  correct_response: 'j'}
-	];
+  var preload = {
+      type: jsPsychPreload,
+      // auto_preload: true, 
+      images: [color_images]
+  };
+  timeline.push(preload);
 
-    /* define fixation and test trials */
-    var fixation = {
-    	type: jsPsychHtmlKeyboardResponse,
-    	stimulus: '<div style="font-size:60px;">+</div>',
-    	choices: "NO_KEYS",
-    	trial_duration: 200,
-    	data: {
-    		type: 'fixation'
-  		}
-    };
+  var prompt = {
+    type: jsPsychSurveyText,
+    questions: [{prompt: 'Enter participant ID'}],
+    data: {
+      type: 'prompt',
+      stimulus: 'NA'
+    }
+  };
+  timeline.push(prompt);
 
-    var test = {
-    	type: jsPsychImageKeyboardResponse,
-    	stimulus: jsPsych.timelineVariable('stimulus'),
-    	choices: ['f', 'j'],
-    	data: {
-    		type: 'critical',
-    		correct_response: jsPsych.timelineVariable('correct_response')
-    	}
-    };
 
-    /* define test procedure */
-    var test_procedure = {
-      timeline: [fixation, test],
-      timeline_variables: test_stimuli,
-      randomize_order: true,
-      repetitions: 3
-    };
-    timeline.push(test_procedure);
+  var welcome = {
+    type: jsPsychImageButtonResponse,
+    stimulus: '',
+    choices: ['img/jumpy.jpeg'],
+    button_html:'<img src=%choice%></img>',
+    data: {
+      type: 'welcome',
+      stimulus: 'NA'
+    } 
+  };
 
-    
-    /* start the experiment */
-	jsPsych.run(timeline);
+  timeline.push(welcome);
+
+  // practice stimuli
+  var color_stimuli = [
+    { pads: 'img/colorTL.jpeg', frog: 'img/colorTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/colorTR.jpeg', frog: 'img/colorTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/colorBR.jpeg', frog: 'img/colorBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
+  ];
+
+
+  var iti = { // show blank
+    type: jsPsychImageButtonResponse,
+    stimulus: 'wait',
+    choices: ['img/blank.jpeg'],
+    button_html:'<img src=%choice%></img>',
+    stimulus_width: 1024,
+    maintain_aspect_ratio: true,
+    render_on_canvas: false,
+    trial_duration: 1000,
+    response_ends_trial: false,
+    data: {type: 'ITI'}
+  };
+
+
+  
+  var stimulus = { // Show the stimulus for kids to judge
+    type: jsPsychImageButtonResponse,
+    stimulus: jsPsych.timelineVariable('pads'),
+    button_html: [
+      '<div style="display:flex; width:512px; height:512px; position: absolute; top:0px; left:0px; outline:thick solid #0000FF; z-index:150;"></div>',
+      '<div style="display:flex; width:512px; height:512px; outline:thick solid #0000FF; z-index:150;"></div>',
+      '<div style="display:flex; width:512px; height:512px; outline:thick solid #0000FF; z-index:150;"></div>',
+      '<div style="display:flex; width:512px; height:512px; outline:thick solid #0000FF; z-index:150;"></div>',
+
+
+
+
+
+    ],
+    //trial_duration: 2000, // limit reactions to 2s.
+    choices:['1','2','3','4'],
+    stimulus_width: 1024,
+    maintain_aspect_ratio: true,
+    render_on_canvas: false,
+    data: {type: 'search'}
+  };
+
+  var feedback = { // Show the frog's location as feedback
+    type: jsPsychImageButtonResponse,
+    stimulus: jsPsych.timelineVariable('target'),
+    choices: [jsPsych.timelineVariable('frog')],
+    button_html:'<img src=%choice%></img>',
+    stimulus_width: 1024,
+    maintain_aspect_ratio: true,
+    render_on_canvas: true,
+    data: {type: 'feedback'}
+  };
+
+  
+  // present practice trials 
+  var color_trials = {
+    timeline: [iti, stimulus, feedback], // removed fixation...
+    timeline_variables: color_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+  timeline.push(color_trials);
+
+
+
+  //ending sequence
+  timeline.push(iti);
+  timeline.push(welcome);
+
+
+  jsPsych.run(timeline);
+
 
   </script>
-
 </html>
+
+
