@@ -36,7 +36,7 @@
   var preload = {
       type: jsPsychPreload,
       //auto_preload: true 
-      images: [color_images, shape_images, test_images]
+      cimages: [color_images]
   };
   timeline.push(preload);
 
@@ -81,24 +81,24 @@
     { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
   ];
 
-  var shape_stimuli = [
-    { pads: 'img/shapeTL.jpeg', frog: 'img/shapeTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/shapeTR.jpeg', frog: 'img/shapeTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/shapeBR.jpeg', frog: 'img/shapeBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
-  ];
+  // var shape_stimuli = [
+  //   { pads: 'img/shapeTL.jpeg', frog: 'img/shapeTLfrog.jpeg', target: 'TL'},
+  //   { pads: 'img/shapeTR.jpeg', frog: 'img/shapeTRfrog.jpeg', target: 'TR'},
+  //   { pads: 'img/shapeBR.jpeg', frog: 'img/shapeBRfrog.jpeg', target: 'BR'},
+  //   { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
+  // ];
   
-  // test stimuli
-  var test_stimuli = [
-    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL'},
-    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
-  ];
+  // // test stimuli
+  // var test_stimuli = [
+  //   { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
+  //   { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR'},
+  //   { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
+  //   { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL'},
+  //   { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL'},
+  //   { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
+  //   { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR'},
+  //   { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
+  // ];
 
   // define basic types of things to present
 
@@ -121,6 +121,7 @@
     choices: ['img/blank.jpeg'],
     button_html:'<img src=%choice%></img>',
     stimulus_width: 1024,
+    stimulus_height: 768,
     maintain_aspect_ratio: true,
     render_on_canvas: true,
     trial_duration: 1000,
@@ -137,6 +138,7 @@
     button_html:'<img src=%choice%></img>',
     //trial_duration: 2000, // limit reactions to 2s.
     stimulus_width: 1024,
+    stimulus_height: 768,
     maintain_aspect_ratio: true,
     render_on_canvas: true,
     data: {type: 'search'}
@@ -148,6 +150,7 @@
     choices: [jsPsych.timelineVariable('frog')],
     button_html:'<img src=%choice%></img>',
     stimulus_width: 1024,
+    stimulus_height: 768,
     maintain_aspect_ratio: true,
     render_on_canvas: true,
     data: {type: 'feedback'}
@@ -164,24 +167,24 @@
 
   timeline.push(color_trials);
 
-  var shape_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: shape_stimuli,
-    randomize_order: true,
-    repetitions: 1
-  };
+  // var shape_trials = {
+  //   timeline: [iti, stimulus, feedback], // removed fixation...
+  //   timeline_variables: shape_stimuli,
+  //   randomize_order: true,
+  //   repetitions: 1
+  // };
 
-  timeline.push(shape_trials);
+  // timeline.push(shape_trials);
 
-  // present test trials 
-  var test_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: test_stimuli,
-    randomize_order: true,
-    repetitions: 2
-  };
+  // // present test trials 
+  // var test_trials = {
+  //   timeline: [iti, stimulus, feedback], // removed fixation...
+  //   timeline_variables: test_stimuli,
+  //   randomize_order: true,
+  //   repetitions: 2
+  // };
 
-  timeline.push(test_trials);
+  // timeline.push(test_trials);
 
   //ending sequence
   timeline.push(iti);
