@@ -117,7 +117,7 @@ var SpatialContextButtonResponse = (function (jspsych) {
           btn.style.border = 'none';
           btn.style.fontSize = 0;
           btn.style.height = (height/2).toString() + "px";
-          btn.borderRadius = 30;
+          btn.style.borderRadius = (30).toString() + "px";
         });
 
         // start timing

@@ -13,7 +13,8 @@
     <script src="spatial-context-image-plugin.js"></script>
     <script src="data-download-plugin.js"></script>
     <style type="text/css">
-      .spatial-context-btn
+      /* Remove blinking effect in tablet browser */
+      .spatial-context-btn #spatial-context-btn-div #spatial-context-main-div
         {
           -webkit-tap-highlight-color:rgba(0,0,0,0);
 
@@ -154,7 +155,7 @@
     repetitions: 1
   };
 
-  // timeline.push(shape_trials);
+  timeline.push(shape_trials);
 
  // present test trials 
  var test_trials = {
@@ -164,7 +165,7 @@
     repetitions: 2
   };
 
-  // timeline.push(test_trials);
+  timeline.push(test_trials);
 
   //ending sequence
   timeline.push(iti);
