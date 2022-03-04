@@ -59,7 +59,7 @@
 
   var preload = {
       type: jsPsychPreload,
-      images: color_images.concat(shape_images, test_images),
+      images: color_images.concat(shape_images, test_images, color_images),
   };
   timeline.push(preload);
 
@@ -102,16 +102,24 @@
     { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
   ];
   
+  // practice stimuli
+  var practice_stimuli = [
+    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
+    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
+    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
+    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
+  ];
+
   // test stimuli
   var test_stimuli = [
-    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL'},
-    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
+    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL', axis: "Lateral"},
+    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR', axis: "Lateral"},
+    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR', axis: "Lateral"},
+    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL', axis: "Lateral"},
+    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL', axis: "Sagittal"},
+    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR', axis: "Sagittal"},
+    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR', axis: "Sagittal"},
+    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL', axis: "Sagittal"}
   ];
 
 
@@ -134,7 +142,8 @@
     choices:['TL','TR','BL','BR'],
     data: {
       type: 'search',
-      target_response: jsPsych.timelineVariable('target') 
+      target_response: jsPsych.timelineVariable('target'),
+      axis: jsPsych.timelineVariable('axis')
     },
     on_finish: function(data){
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
@@ -154,7 +163,7 @@
   };
 
   
-  // present practice trials 
+  // present color trials 
   var color_trials = {
     timeline: [iti, stimulus, feedback], // removed fixation...
     timeline_variables: color_stimuli,
@@ -173,6 +182,20 @@
   };
 
   timeline.push(shape_trials);
+
+ // present practice orientation trials 
+ var practice_trials = {
+    timeline: [iti, stimulus, feedback], // removed fixation...
+    timeline_variables: practice_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+timeline.push(practice_trials);
+
+
+timeline.push(welcome); // Ok, practice is over.
+
 
  // present test trials 
  var test_trials = {
