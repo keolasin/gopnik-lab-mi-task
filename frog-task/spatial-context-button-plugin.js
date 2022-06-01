@@ -94,6 +94,7 @@ var SpatialContextButtonResponse = (function (jspsych) {
         // div.style.background = url(trial.stimulus);
         div.style.position = 'relative';
         div.style.overflow = 'hidden';
+        div.static.position = 'fixed'
 
 
          //Set button div style
