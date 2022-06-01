@@ -17,11 +17,18 @@
    width: 100%;
    overflow: hidden;
    position: fixed;
+   overscroll-behavior: none;
 
  }
  
  .jspsych-display-element:focus {
    outline: none;
+   /* height: 100%;
+   width: 100%;
+   overflow: hidden;
+   position: fixed;
+   overscroll-behavior: none;
+   overscroll-behavior: none; */
  }
  
  .jspsych-content-wrapper {
