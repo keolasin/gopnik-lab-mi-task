@@ -93,6 +93,7 @@ var SpatialContextButtonResponse = (function (jspsych) {
         div.style.width = width.toString() + "px";
         // div.style.background = url(trial.stimulus);
         div.style.position = 'relative';
+        div.style.overflow = 'hidden';
 
 
          //Set button div style
@@ -153,8 +154,6 @@ var SpatialContextButtonResponse = (function (jspsych) {
           
           end_trial();
         }
-
-          
 
 
         // function to end trial when it is time

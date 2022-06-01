@@ -81,7 +81,6 @@ var SpatialContextImage= (function (jspsych) {
         img.style.width = width.toString() + "px";
 
 
-
         //Set main div style
         var div = display_element.querySelector(
           "#spatial-context-main-div"
@@ -90,6 +89,8 @@ var SpatialContextImage= (function (jspsych) {
         div.style.width = width.toString() + "px";
         // div.style.background = url(trial.stimulus);
         div.style.position = 'relative';
+        div.style.overflow = 'hidden';
+
 
 
          //Set button div style
