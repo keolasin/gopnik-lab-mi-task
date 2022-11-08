@@ -159,7 +159,7 @@
 
   var iti = { // show blank
     type: SpatialContextImage,
-    stimulus: 'img/blank.jpeg',
+    stimulus: '~white screen image~',
     stimulus_width: 1024,
     stimulus_height: 768,
     trial_duration: 1500,
@@ -188,8 +188,8 @@
   var MI_stimulus = { // Show the stimulus for kids to judge
     type: SpatialContextButtonResponse,
     stimulus: jsPsych.timelineVariable('item'),
-    stimulus_width: 1024,
-    stimulus_height: 768,
+    stimulus_width: 384,
+    stimulus_height: 384,
     choices:['TL','TR','BL','BR'],
     data: {
       type: 'search',
@@ -204,9 +204,9 @@
 
   var feedback = { // Show the frog's location as feedback
     type: SpatialContextImage,
-    stimulus: jsPsych.timelineVariable('frog'),
-    stimulus_width: 1024,
-    stimulus_height: 768,
+    stimulus: jsPsych.timelineVariable('match'),
+    stimulus_width: 384,
+    stimulus_height: 384,
     data: {
       type: 'feedback',
     }
@@ -263,8 +263,6 @@ timeline.push(welcome); // Ok, practice is over.
     randomize_order: true,
     repetitions: 2
   };
-
-  timeline.push(test_trials);
 
   //ending sequence
   timeline.push(iti);
