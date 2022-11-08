@@ -128,6 +128,34 @@
     { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL', axis: "Sagittal"}
   ];
 
+  // MI stimuli
+  var MI_stimuli = [
+    { item: 'MI_img/keyBR.jpg', match: 'MI_img/keyBRi.jpg', target: 'TL', axis: ""},
+    { item: 'MI_img/toothbrushTL.jpg', match: 'MI_img/toothbrushTLi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/spatulaBR.jpg', match: 'MI_img/spatulaBRi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/toothbrushTR.jpg', match: 'MI_img/toothbrushTRi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/combTL.jpg', match: 'MI_img/combTLi.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/flashlightTR.jpg', match: 'MI_img/flashlightTRi.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/scoopTR.jpg', match: 'MI_img/scoopTRi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/combBL.jpg', match: 'MI_img/combBLi.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/flashlightTL.jpg', match: 'MI_img/flashlightTLi.jpg', target: 'TL', axis: ""},
+    { item: 'MI_img/combTR.jpg', match: 'MI_img/combTRi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/scoopBR.jpg', match: 'MI_img/scoopBRi.jpg', target: 'TL', axis: ""},
+    { item: 'MI_img/keyTR.jpg', match: 'MI_img/keyTRi.jpg', target: 'TL', axis: ""},
+    { item: 'MI_img/scoopTL.jpg', match: 'MI_img/scoopTLi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/keyTL.jpg', match: 'MI_img/keyTLi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/combBR.jpg', match: 'MI_img/combBRi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/toothbrushBR.jpg', match: 'MI_img/toothbrushBRi.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/flashlightBR.jpg', match: 'MI_img/flashlightBRi.jpg', target: 'TL', axis: ""},
+    { item: 'MI_img/toothbrushBL.jpg', match: 'MI_img/latTRfrog.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/flashlightBL.jpg', match: 'MI_img/flashlightBLi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/spatulaTL.jpg', match: 'MI_img/spatulaTLi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/scoopBL.jpg', match: 'MI_img/scoopBLi.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/spatulaTR.jpg', match: 'MI_img/spatulaTRi.jpg', target: 'BL', axis: ""},
+    { item: 'MI_img/keyBL.jpg', match: 'MI_img/keyBLi.jpg', target: 'TR', axis: ""},
+    { item: 'MI_img/spatulaBL.jpg', match: 'MI_img/spatulaBLi.jpg', target: 'TL', axis: ""}
+  ];
+
 
   var iti = { // show blank
     type: SpatialContextImage,
@@ -157,6 +185,23 @@
 
   }
 
+  var MI_stimulus = { // Show the stimulus for kids to judge
+    type: SpatialContextButtonResponse,
+    stimulus: jsPsych.timelineVariable('item'),
+    stimulus_width: 1024,
+    stimulus_height: 768,
+    choices:['TL','TR','BL','BR'],
+    data: {
+      type: 'search',
+      target_response: jsPsych.timelineVariable('target'),
+      axis: jsPsych.timelineVariable('axis')
+    },
+    on_finish: function(data){
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
+    }
+
+  }
+
   var feedback = { // Show the frog's location as feedback
     type: SpatialContextImage,
     stimulus: jsPsych.timelineVariable('frog'),
@@ -166,13 +211,21 @@
       type: 'feedback',
     }
 
-  };
+  }
 
   
   // present color trials 
   var color_trials = {
     timeline: [iti, stimulus, feedback], // removed fixation...
     timeline_variables: color_stimuli,
+    randomize_order: true,
+    repetitions: 1
+  };
+
+    // present MI trials 
+    var MI_trial = {
+    timeline: [iti, MI_stimulus, feedback], // removed fixation...
+    timeline_variables: MI_stimuli,
     randomize_order: true,
     repetitions: 1
   };
@@ -216,6 +269,7 @@ timeline.push(welcome); // Ok, practice is over.
   //ending sequence
   timeline.push(iti);
   timeline.push(welcome);
+  timeline.push(MI_trial);
 
   //Save Data
   var save_data = {
