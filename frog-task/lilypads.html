@@ -53,14 +53,13 @@
 
   var timeline = [];
 
-  var color_images = ['img/jumpy.jpeg', 'img/blank.jpeg', 'img/colorTL.jpeg', 'img/colorTLfrog.jpeg', 'img/colorTR.jpeg', 'img/colorTRfrog.jpeg', 'img/colorBR.jpeg', 'img/colorBRfrog.jpeg', 'img/colorBL.jpeg', 'img/colorBLfrog.jpeg'];
-  var shape_images = ['img/shapeTL.jpeg', 'img/shapeTLfrog.jpeg', 'img/shapeTR.jpeg', 'img/shapeTRfrog.jpeg', 'img/shapeBR.jpeg', 'img/shapeBRfrog.jpeg', 'img/shapeBL.jpeg', 'img/shapeBLfrog.jpeg'];
-  var test_images = ['img/latTL.jpeg', 'img/latTLfrog.jpeg', 'img/latTR.jpeg','img/latTRfrog.jpeg', 'img/latBR.jpeg', 'img/latBRfrog.jpeg', 'img/latBL.jpeg', 'img/latBLfrog.jpeg', 'img/sagTL.jpeg', 'img/sagTLfrog.jpeg','img/sagTR.jpeg', 'img/sagTRfrog.jpeg', 'img/sagBR.jpeg', 'img/sagBRfrog.jpeg', 'img/sagBL.jpeg', 'img/sagBLfrog.jpeg'];
-
+  var MI_images = ['MI_img/combBL.jpg', 'MI_img/combBLi.jpg'];
+  
   var preload = {
       type: jsPsychPreload,
-      images: color_images.concat(shape_images, test_images, color_images),
+      images: MI_images.concat(MI_images),
   };
+
   timeline.push(preload);
 
   var prompt = {
@@ -71,6 +70,7 @@
       stimulus: 'NA'
     }
   };
+
   timeline.push(prompt);
 
   //enter fullscreen
@@ -78,6 +78,7 @@
     type: jsPsychFullscreen,
     fullscreen_mode: true
   };
+
   // timeline.push(enter_fullscreen);
 
   var welcome = {
@@ -90,43 +91,6 @@
       stimulus: 'NA'
     } 
   };
-
-  timeline.push(welcome);
-
-  // practice stimuli
-  var color_stimuli = [
-    { pads: 'img/colorTL.jpeg', frog: 'img/colorTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/colorTR.jpeg', frog: 'img/colorTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/colorBR.jpeg', frog: 'img/colorBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/colorBL.jpeg', frog: 'img/colorBLfrog.jpeg', target: 'BL'}
-  ];
-
-  var shape_stimuli = [
-    { pads: 'img/shapeTL.jpeg', frog: 'img/shapeTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/shapeTR.jpeg', frog: 'img/shapeTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/shapeBR.jpeg', frog: 'img/shapeBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/shapeBL.jpeg', frog: 'img/shapeBLfrog.jpeg', target: 'BL'}
-  ];
-  
-  // practice stimuli
-  var practice_stimuli = [
-    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL'},
-    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR'},
-    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR'},
-    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL'}
-  ];
-
-  // test stimuli
-  var test_stimuli = [
-    { pads: 'img/latTL.jpeg', frog: 'img/latTLfrog.jpeg', target: 'TL', axis: "Lateral"},
-    { pads: 'img/latTR.jpeg', frog: 'img/latTRfrog.jpeg', target: 'TR', axis: "Lateral"},
-    { pads: 'img/latBR.jpeg', frog: 'img/latBRfrog.jpeg', target: 'BR', axis: "Lateral"},
-    { pads: 'img/latBL.jpeg', frog: 'img/latBLfrog.jpeg', target: 'BL', axis: "Lateral"},
-    { pads: 'img/sagTL.jpeg', frog: 'img/sagTLfrog.jpeg', target: 'TL', axis: "Sagittal"},
-    { pads: 'img/sagTR.jpeg', frog: 'img/sagTRfrog.jpeg', target: 'TR', axis: "Sagittal"},
-    { pads: 'img/sagBR.jpeg', frog: 'img/sagBRfrog.jpeg', target: 'BR', axis: "Sagittal"},
-    { pads: 'img/sagBL.jpeg', frog: 'img/sagBLfrog.jpeg', target: 'BL', axis: "Sagittal"}
-  ];
 
   // MI stimuli
   var MI_stimuli = [
@@ -147,7 +111,7 @@
     { item: 'MI_img/combBR.jpg', match: 'MI_img/combBRi.jpg', target: 'BL', axis: ""},
     { item: 'MI_img/toothbrushBR.jpg', match: 'MI_img/toothbrushBRi.jpg', target: 'BR', axis: ""},
     { item: 'MI_img/flashlightBR.jpg', match: 'MI_img/flashlightBRi.jpg', target: 'TL', axis: ""},
-    { item: 'MI_img/toothbrushBL.jpg', match: 'MI_img/latTRfrog.jpg', target: 'BR', axis: ""},
+    { item: 'MI_img/toothbrushBL.jpg', match: 'MI_img/tootbrushBLi.jpg', target: 'BR', axis: ""},
     { item: 'MI_img/flashlightBL.jpg', match: 'MI_img/flashlightBLi.jpg', target: 'BL', axis: ""},
     { item: 'MI_img/spatulaTL.jpg', match: 'MI_img/spatulaTLi.jpg', target: 'TR', axis: ""},
     { item: 'MI_img/scoopBL.jpg', match: 'MI_img/scoopBLi.jpg', target: 'BR', axis: ""},
@@ -157,122 +121,42 @@
   ];
 
 
-  var iti = { // show blank
+  var iti = { // show the stimuli
     type: SpatialContextImage,
-<<<<<<< HEAD
-    stimulus: 'img/blank.jpeg',
+    stimulus: jsPsych.timelineVariable('item'),
     stimulus_width: 384,
     stimulus_height: 384,
-=======
-    stimulus: '~white screen image~',
-    stimulus_width: 1024,
-    stimulus_height: 768,
->>>>>>> 55c9a030ff20d8a846255540215404d9a0133d4f
     trial_duration: 1500,
     response_ends_trial: false,
     data: {type: 'ITI'}
   }
 
-
-  var stimulus = { // Show the stimulus for kids to judge
-    type: SpatialContextButtonResponse,
-    stimulus: jsPsych.timelineVariable('pads'),
-    stimulus_width: 1024,
-    stimulus_height: 768,
-    choices:['TL','TR','BL','BR'],
-    data: {
-      type: 'search',
-      target_response: jsPsych.timelineVariable('target'),
-      axis: jsPsych.timelineVariable('axis')
-    },
-    on_finish: function(data){
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
-    }
-
-  }
-
   var MI_stimulus = { // Show the stimulus for kids to judge
     type: SpatialContextButtonResponse,
-    stimulus: jsPsych.timelineVariable('item'),
-    stimulus_width: 384,
-    stimulus_height: 384,
-    choices:['TL','TR','BL','BR'],
-    data: {
-      type: 'search',
-      target_response: jsPsych.timelineVariable('target'),
-      axis: jsPsych.timelineVariable('axis')
-    },
-    on_finish: function(data){
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
-    }
-
-  }
-
-  var feedback = { // Show the frog's location as feedback
-    type: SpatialContextImage,
     stimulus: jsPsych.timelineVariable('match'),
     stimulus_width: 384,
     stimulus_height: 384,
+    choices: ['TL','TR','BL','BR'],
     data: {
-      type: 'feedback',
+      type: 'search',
+      target_response: jsPsych.timelineVariable('target'),
+      axis: jsPsych.timelineVariable('axis')
+    },
+    on_finish: function(data){
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.target_response);
     }
-
   }
-
-  
-  // present color trials 
-  var color_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: color_stimuli,
-    randomize_order: true,
-    repetitions: 1
-  };
 
     // present MI trials 
     var MI_trial = {
-    timeline: [iti, MI_stimulus, feedback], // removed fixation...
+    timeline: [iti, MI_stimulus], // removed fixation...
     timeline_variables: MI_stimuli,
     randomize_order: true,
     repetitions: 1
   };
 
-  timeline.push(color_trials);
-
-  // present shape trials 
-  var shape_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: shape_stimuli,
-    randomize_order: true,
-    repetitions: 1
-  };
-
-  timeline.push(shape_trials);
-
- // present practice orientation trials 
- var practice_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: practice_stimuli,
-    randomize_order: true,
-    repetitions: 1
-  };
-
-timeline.push(practice_trials);
-
-
-timeline.push(welcome); // Ok, practice is over.
-
-
- // present test trials 
- var test_trials = {
-    timeline: [iti, stimulus, feedback], // removed fixation...
-    timeline_variables: test_stimuli,
-    randomize_order: true,
-    repetitions: 2
-  };
-
   //ending sequence
   timeline.push(iti);
-  timeline.push(welcome);
   timeline.push(MI_trial);
 
   //Save Data
@@ -282,9 +166,7 @@ timeline.push(welcome); // Ok, practice is over.
 
   timeline.push(save_data);
 
-
   jsPsych.run(timeline);
-
 
   </script>
 </html>
